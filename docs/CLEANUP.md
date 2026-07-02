@@ -1,6 +1,7 @@
 # Cleanup Policy
 
 This repository keeps source, configs, tests, scripts, docs, and reference papers. It excludes local generated state.
+`research/sparta/` and `archive/srad-snapshot/` are retained as provenance and baseline comparison material, not generated output.
 
 Ignored or removable files include:
 

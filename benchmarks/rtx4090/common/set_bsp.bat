@@ -1,15 +1,17 @@
 @echo OFF
 echo Setting VisualStudio environment variables
-pushd %VCINSTALLDIR%\bin\amd64
-call vcvars64.bat
+if defined VCINSTALLDIR (
+  pushd "%VCINSTALLDIR%\bin\amd64"
+  call vcvars64.bat
+  popd
+)
 
 echo Setting up the environment to run OpenCL BSP for Pikes Peak...
-set AOCL_BOARD_PACKAGE_ROOT=C:\altera\BSP_263944
 set PATH=%ALTERAOCLSDKROOT%\bin;%PATH%
 set PATH=%ALTERAOCLSDKROOT%\host\windows64\bin;%PATH%
 set PATH=%AOCL_BOARD_PACKAGE_ROOT%\Software\SDK\x64\Release;%PATH%
 set PATH=%QSYS_ROOTDIR%;%PATH%
-set PATH=C:\Program Files (x86)\GnuWin32\bin;%PATH%
+if defined GNUWIN32_BIN set PATH=%GNUWIN32_BIN%;%PATH%
 
 set CL_CONTEXT_COMPILER_MODE_ALTERA=3
 
@@ -19,8 +21,7 @@ echo Add to PATH: %ALTERAOCLSDKROOT%\bin
 echo Add to PATH: %ALTERAOCLSDKROOT%\host\windows64\bin
 echo Add to PATH: %AOCL_BOARD_PACKAGE_ROOT%\Software\SDK\x64\Release
 echo Add to PATH: %QSYS_ROOTDIR%
-echo Add to PATH: C:\Program Files (x86)\GnuWin32\bin
+if defined GNUWIN32_BIN echo Add to PATH: %GNUWIN32_BIN%
 
 rem cd %AOCL_BOARD_PACKAGE_ROOT%
-popd
 :end

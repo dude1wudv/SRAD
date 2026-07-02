@@ -2,11 +2,12 @@
 
 ## Root
 
-- `variants/srad/`: main SRAD implementation variants.
+- `variants/srad/ours_192lane/`: final journal-target SRAD implementation for VCK190.
+- `variants/srad/`: other SRAD implementation and baseline variants.
 - `variants/stencilflow/`: stencilflow experiment variants.
 - `benchmarks/rtx4090/`: CUDA benchmark code for RTX4090.
-- `research/sparta/`: SPARTA reference material and paper.
-- `archive/srad-snapshot/`: previous nested SRAD source tree kept for reference.
+- `research/sparta/`: SPARTA reference material and paper, retained for provenance.
+- `archive/srad-snapshot/`: previous nested SRAD source tree kept for comparison.
 - `docs/`: repository-level documentation.
 - `scripts/`: maintenance scripts.
 - `.github/`: GitHub issue, pull request, and CI configuration.
@@ -30,3 +31,4 @@ Most Vitis variants follow this shape:
 ## Important Convention
 
 Run commands from the variant directory. Variant Makefiles use relative paths such as `./data`, so root-level build commands should delegate into the target variant instead of moving files across variants.
+Keep `research/` and `archive/` as reference material unless a cleanup task explicitly says to remove them.

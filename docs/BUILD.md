@@ -5,14 +5,16 @@
 Example:
 
 ```bash
-cd variants/srad/ours_32lane
+cd variants/srad/ours_192lane
 make data
+python data/test_sim_semantics.py
 make sim
 ```
 
 Useful targets:
 
 - `make data`: generate local input and golden data.
+- `python data/test_sim_semantics.py`: run fast Python semantic checks for the final `ours_192lane` mapping.
 - `make sim`: build and run the default simulation path.
 - `make TARGET=hw sim`: run the hardware-target simulation path where supported.
 - `make all`: build AIE, PL kernels, host, package, and `sd_card/` output.
@@ -28,6 +30,10 @@ make
 ```
 
 Some CUDA subdirectories carry their own Makefiles and README files. Prefer their local instructions.
+
+## Board Target
+
+The journal-target SRAD design is `variants/srad/ours_192lane/` for Xilinx VCK190. Its Makefile defaults `BASE_PLATFORM` to `xilinx_vck190_base_202320_1` under `PLATFORM_REPO_PATHS`.
 
 ## Python Checks
 

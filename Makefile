@@ -1,6 +1,6 @@
 .PHONY: list sim data clean-generated
 
-VAR ?= variants/srad/ours_32lane
+VAR ?= variants/srad/ours_192lane
 
 list:
 	@find variants -maxdepth 2 -name Makefile -print
