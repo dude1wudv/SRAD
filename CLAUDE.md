@@ -16,6 +16,19 @@ SRAD (Speckle Reducing Anisotropic Diffusion) journal work: algorithm exploratio
 
 Most Vitis variants share this layout: `aie/` (graph + kernels), `pl/` (Vitis HLS PL kernels), `ps/` (host program), `data/` (generators/verifiers + local generated data), plus variant-local `Makefile`, `conn.cfg`, `run.sh`, `xrt.ini`.
 
+## Project-Local Skills And Workflow
+
+This repository commits shared skills under `.agents/skills/` so GitHub collaborators can use the same workflow even without global Claude/Codex skills installed.
+
+- Start `ours_192lane` work with `.agents/skills/srad-ours-192lane-workflow/SKILL.md`.
+- Fuzzy user input, vague requirements, PRD/spec/docs, or `plan-docx`/`plan-docs` requests -> `.agents/skills/plan-docs/SKILL.md`.
+- Kiro/spec/subagent/context-window/large-file-read work -> `.agents/skills/spec-subagents/SKILL.md`.
+- Code changes and bug fixes -> Superpowers TDD copy: `.agents/skills/superpowers-test-driven-development/SKILL.md`. Write and run the RED failing check before implementation, then GREEN, then refactor.
+- Compile/test/runtime/performance bugs -> `.agents/skills/superpowers-systematic-debugging/SKILL.md` before fixing.
+- Completion claims -> `.agents/skills/superpowers-verification-before-completion/SKILL.md` and fresh `python scripts/check_ours_192lane.py` output.
+
+Do not read long files whole. Use `docs/CODEMAP_ours_192lane.md` first, then targeted ranges/search hits.
+
 ## Build, Test, and Development Commands
 
 Run from inside the variant directory:

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Superpowers Plan Execution"
+  short_description: "Execute written plans with checkpoints"
+  default_prompt: "Use $superpowers-executing-plans to execute the written plan step by step."

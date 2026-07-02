@@ -12,8 +12,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Compile Python files
-        run: python -m compileall variants benchmarks research archive scripts
-      - name: Run ours_192lane semantic checks
-        working-directory: variants/srad/ours_192lane
-        run: python data/test_sim_semantics.py
+      - name: Run reusable ours_192lane checks
+        run: python scripts/check_ours_192lane.py

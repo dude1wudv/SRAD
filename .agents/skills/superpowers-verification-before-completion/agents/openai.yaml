@@ -1,0 +1,4 @@
+interface:
+  display_name: "Superpowers Verification"
+  short_description: "Fresh evidence before completion claims"
+  default_prompt: "Use $superpowers-verification-before-completion to verify the change before claiming it is done."

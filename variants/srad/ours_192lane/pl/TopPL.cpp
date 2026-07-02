@@ -266,7 +266,7 @@ void load_16lane_input_rows(const float* current,
                             hls::stream<plio_word_t>& to_aie_words15) {
 #pragma HLS INLINE off
     float row_elems[kWorkerDataElems];
-#pragma HLS ARRAY_PARTITION variable=row_elems block factor=16 dim=1
+#pragma HLS ARRAY_PARTITION variable=row_elems cyclic factor=16 dim=1
     const int col_base = worker_col_base(worker_id);
     const int row_base_global = worker_row_base(worker_id);
 

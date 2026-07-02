@@ -1,0 +1,4 @@
+interface:
+  display_name: "SRAD 192-Lane Workflow"
+  short_description: "VCK190 SRAD workflow, code map, TDD, debug"
+  default_prompt: "Use $srad-ours-192lane-workflow to make a VCK190 SRAD change without rereading long files."

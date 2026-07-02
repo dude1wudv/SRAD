@@ -1,0 +1,4 @@
+interface:
+  display_name: "plan-docx"
+  short_description: "Project-local workflow skill"
+  default_prompt: "Use $plan-docx for this SRAD repository task."

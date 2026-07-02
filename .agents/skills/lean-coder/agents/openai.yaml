@@ -1,0 +1,4 @@
+interface:
+  display_name: "lean-coder"
+  short_description: "Project-local workflow skill"
+  default_prompt: "Use $lean-coder for this SRAD repository task."

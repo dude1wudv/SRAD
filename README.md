@@ -43,6 +43,12 @@ Common targets:
 
 See [docs/BUILD.md](docs/BUILD.md) and [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
+Shared workflow skills are committed under `.agents/skills/`; see [docs/DEVELOPMENT_WORKFLOW.md](docs/DEVELOPMENT_WORKFLOW.md). The reusable local check is:
+
+```bash
+python scripts/check_ours_192lane.py
+```
+
 ## Toolchain
 
 Most Vitis/AIE variants expect environment variables such as:

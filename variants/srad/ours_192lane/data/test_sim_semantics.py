@@ -505,6 +505,20 @@ class SimSemanticsTest(unittest.TestCase):
             toppl,
         )
 
+    def test_toppl_load_row_buffer_uses_power_of_two_cyclic_partition(self):
+        toppl = (
+            Path(__file__).resolve().parents[1] / "pl" / "TopPL.cpp"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            "#pragma HLS ARRAY_PARTITION variable=row_elems cyclic factor=16 dim=1",
+            toppl,
+        )
+        self.assertNotIn(
+            "#pragma HLS ARRAY_PARTITION variable=row_elems block factor=16 dim=1",
+            toppl,
+        )
+
     def test_toppl_keeps_lane_output_addressing_static_without_polling_state(self):
         toppl = (
             Path(__file__).resolve().parents[1] / "pl" / "TopPL.cpp"

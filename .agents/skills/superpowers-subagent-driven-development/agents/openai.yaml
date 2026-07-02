@@ -1,0 +1,4 @@
+interface:
+  display_name: "superpowers-subagent-driven-development"
+  short_description: "Project-local workflow skill"
+  default_prompt: "Use $superpowers-subagent-driven-development for this SRAD repository task."

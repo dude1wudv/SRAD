@@ -1,0 +1,4 @@
+interface:
+  display_name: "Superpowers Plans"
+  short_description: "Bite-sized TDD implementation plans"
+  default_prompt: "Use $superpowers-writing-plans to create a bite-sized TDD implementation plan."

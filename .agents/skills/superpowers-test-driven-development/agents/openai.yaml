@@ -1,0 +1,4 @@
+interface:
+  display_name: "Superpowers TDD"
+  short_description: "Red-green-refactor before code changes"
+  default_prompt: "Use $superpowers-test-driven-development to write a failing test before implementation."

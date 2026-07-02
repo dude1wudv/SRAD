@@ -7,7 +7,10 @@ Desktop.ini
 *~
 .vscode/
 .idea/
-**/.agents/
+**/.agents/*
+!.agents/
+!.agents/skills/
+!.agents/skills/**
 REFACTOR_PROMPT.md
 context_pack_*.md
 

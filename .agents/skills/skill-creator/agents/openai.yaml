@@ -1,0 +1,4 @@
+interface:
+  display_name: "skill-creator"
+  short_description: "Project-local workflow skill"
+  default_prompt: "Use $skill-creator for this SRAD repository task."

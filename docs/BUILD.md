@@ -40,10 +40,10 @@ The journal-target SRAD design is `variants/srad/ours_192lane/` for Xilinx VCK19
 Repository-level syntax check:
 
 ```bash
-python -m compileall variants benchmarks research archive scripts
+python scripts/check_ours_192lane.py
 ```
 
-This does not replace Vitis simulation; it only catches Python syntax errors in generators, verifiers, and helper scripts.
+This runs the fast `ours_192lane` semantic checks, Python compilation, and project-local skill validation. It does not replace Vitis simulation.
 
 ## Generated Data
 

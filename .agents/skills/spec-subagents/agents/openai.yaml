@@ -1,0 +1,4 @@
+interface:
+  display_name: "spec-subagents"
+  short_description: "Project-local workflow skill"
+  default_prompt: "Use $spec-subagents for this SRAD repository task."

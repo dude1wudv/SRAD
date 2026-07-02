@@ -1,0 +1,4 @@
+interface:
+  display_name: "Superpowers Debugging"
+  short_description: "Root-cause debugging before fixes"
+  default_prompt: "Use $superpowers-systematic-debugging to diagnose the build or runtime failure before fixing it."

@@ -48,6 +48,18 @@ make sim
 
 The Makefiles expect Vitis/XRT environment variables such as `XILINX_VITIS`, `XILINX_HLS`, `EDGE_COMMON_SW_PATH`, `SYSROOT_PATH`, and `PLATFORM_REPO_PATHS`.
 
+## Project-Local Skills And Workflow
+
+This repo commits shared workflow skills under `.agents/skills/` so GitHub collaborators can use the same rules without relying on a global Codex/Claude setup.
+
+- For any `ours_192lane` code, performance, compile, test, or documentation task, start with `.agents/skills/srad-ours-192lane-workflow/SKILL.md`.
+- For fuzzy user input or vague requirements, automatically use `.agents/skills/plan-docs/SKILL.md`; `plan-docx` is treated as the same trigger.
+- For Kiro/spec/subagent/context-window/large-file-read work, use `.agents/skills/spec-subagents/SKILL.md`.
+- For code changes and bug fixes, use Superpowers TDD: write/run a RED failing check first, then implement GREEN, then refactor only after green.
+- Before completion claims, run fresh verification with `python scripts/check_ours_192lane.py`.
+
+Do not read long files whole. Use `docs/CODEMAP_ours_192lane.md` first, then targeted ranges/search hits.
+
 ## Target Hardware & Dependencies
 
 Default target board is Xilinx VCK190. Write new Vitis/AIE/PL/PS code, platform assumptions, and dependency instructions for VCK190 unless the user explicitly names another board.
