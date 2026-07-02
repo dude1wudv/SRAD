@@ -3,8 +3,8 @@
 #include <ap_int.h>
 #include <hls_stream.h>
 
-#define TRI1PLIO_MAX_ITER 64
-#define TRI1PLIO_MAX_DDR_WORDS 1024
+#define TRI1PLIO_MAX_ITER 16384
+#define TRI1PLIO_MAX_DDR_WORDS 262144
 
 namespace {
 
@@ -17,8 +17,8 @@ constexpr int kIntsPerPlioWord = 4;
 constexpr int kIntsPerDdrWord = 16;
 constexpr int kPlioWordsPerDdrWord = kIntsPerDdrWord / kIntsPerPlioWord;
 constexpr int kDdrWordsPerRow = kCols / kIntsPerDdrWord;
-constexpr int kBoardGridRows = 64;
-constexpr int kBoardGridDepth = 1;
+constexpr int kBoardGridRows = 256;
+constexpr int kBoardGridDepth = 64;
 constexpr int kBoardIter = kBoardGridRows * kBoardGridDepth;
 
 static_assert(kCols == 256, "tri_1plio TopPL expects 256 columns");

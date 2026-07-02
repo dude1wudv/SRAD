@@ -53,9 +53,10 @@ public:
 
 
         auto net_lap_f1 = connect(k_lap.out[0], k_flux1.in[1]);
-        auto net_lap_f2 = connect(k_lap.out[0], k_flux2.in[2]);
+        auto net_lap_f2 = connect(k_lap.out[1], k_flux2.in[2]);
 
         dimensions(k_lap.out[0])  = {hdiff_cfg::kFluxForwardPackElems};
+        dimensions(k_lap.out[1])  = {hdiff_cfg::kFluxForwardPackElems};
         dimensions(k_flux1.in[1]) = {hdiff_cfg::kFluxForwardPackElems};
         dimensions(k_flux2.in[2]) = {hdiff_cfg::kFluxForwardPackElems};
         fifo_depth(net_lap_f1)      = hdiff_cfg::kFluxInterObjectFifoDepth;

@@ -23,8 +23,8 @@ TopStencilGraph topStencil("stencil");
 namespace {
 
 constexpr int WARMUP_ROWS = hdiff_cfg::kLapWarmupIterations;
-constexpr int BOARD_GRID_ROWS = 64;
-constexpr int BOARD_GRID_DEPTH = 1;
+constexpr int BOARD_GRID_ROWS = 256;
+constexpr int BOARD_GRID_DEPTH = 64;
 constexpr int DEFAULT_ITER = BOARD_GRID_ROWS * BOARD_GRID_DEPTH;
 constexpr int BOARD_OUTPUT_ROWS = BOARD_GRID_ROWS * BOARD_GRID_DEPTH;
 constexpr int OUT_WORDS_PER_ITER = COL;
@@ -113,9 +113,9 @@ int main(int argc, char* argv[]) {
     const std::string xclbin_path = argv[1];
     const int iter_cnt = (argc >= 3) ? std::atoi(argv[2]) : DEFAULT_ITER;
     const std::string input_path =
-        (argc >= 4) ? argv[3] : "./data/input.txt";
+        (argc >= 4) ? argv[3] : "./board_data/input.txt";
     const std::string output_path =
-        (argc >= 5) ? argv[4] : "./aie_out_plio.txt";
+        (argc >= 5) ? argv[4] : "./aie_out_1plio_256x256x64.txt";
 
     if (iter_cnt <= 0) {
         std::fprintf(stderr, "[error] iter_cnt must be > 0\n");
@@ -135,9 +135,9 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    const int input_elems = iter_cnt * COL;
-    const int output_rows = (iter_cnt == DEFAULT_ITER) ? BOARD_OUTPUT_ROWS : iter_cnt;
-    const int output_elems = output_rows * OUT_WORDS_PER_ITER;
+        const int input_elems = iter_cnt * COL;
+        const int output_rows = (iter_cnt == DEFAULT_ITER) ? BOARD_OUTPUT_ROWS : iter_cnt;
+        const int output_elems = output_rows * OUT_WORDS_PER_ITER;
     const std::size_t input_bytes =
         static_cast<std::size_t>(input_elems) * sizeof(std::int32_t);
     const std::size_t output_bytes =
@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
         topStencil.run(iter_cnt / hdiff_cfg::kRowsPerCall);
 
         const auto pl_t0 = Clock::now();
-        auto toppl_run = toppl(input_bo, output_bo, iter_cnt, 1);
+        auto toppl_run = toppl(input_bo, output_bo, iter_cnt);
         toppl_run.wait();
         const auto pl_t1 = Clock::now();
         const long long pl_transfer_us = elapsed_us(pl_t0, pl_t1);
@@ -189,9 +189,14 @@ int main(int argc, char* argv[]) {
         topStencil.wait();
         const auto aie_t1 = Clock::now();
         const long long aie_run_us = elapsed_us(aie_t0, aie_t1);
+        const long long pipeline_total_us = elapsed_us(aie_t0, aie_t1);
 
+        std::printf("iter_cnt       : %d\n", iter_cnt);
+        std::printf("input_elems    : %d\n", input_elems);
+        std::printf("output_elems   : %d\n", output_elems);
         std::printf("pl_transfer_us : %lld\n", pl_transfer_us);
         std::printf("aie_run_us     : %lld\n", aie_run_us);
+        std::printf("pipeline_total_us : %lld\n", pipeline_total_us);
 
         topStencil.end();
         graph_initialized = false;

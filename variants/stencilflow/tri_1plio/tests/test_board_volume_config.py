@@ -10,17 +10,17 @@ def read(rel: str) -> str:
 
 
 class BoardVolumeConfigTest(unittest.TestCase):
-    def test_board_run_defaults_target_raw_256x64_matrix(self):
+    def test_board_run_defaults_target_raw_256x256x64_matrix(self):
         makefile = read("Makefile")
         host = read("ps/host.cpp")
         run_sh = read("run.sh")
 
-        self.assertIn("DATA_GRID_ROWS ?= 64", makefile)
-        self.assertIn("DATA_ITER ?= 64", makefile)
+        self.assertIn("DATA_GRID_ROWS ?= 20", makefile)
+        self.assertIn("DATA_ITER ?= 20", makefile)
         self.assertIn("--raw-volume --kind $(DATA_KIND)", makefile)
-        self.assertIn("BOARD_GRID_ROWS ?= 64", makefile)
-        self.assertIn("BOARD_GRID_DEPTH ?= 1", makefile)
-        self.assertIn("BOARD_DATA_ITER ?= 64", makefile)
+        self.assertIn("BOARD_GRID_ROWS ?= 256", makefile)
+        self.assertIn("BOARD_GRID_DEPTH ?= 64", makefile)
+        self.assertIn("BOARD_DATA_ITER ?= 16384", makefile)
         self.assertIn("BOARD_DATA_DIR ?= ./board_data", makefile)
         self.assertIn("--package.sd_dir $(BOARD_DATA_DIR)", makefile)
 
@@ -35,17 +35,17 @@ class BoardVolumeConfigTest(unittest.TestCase):
         self.assertNotIn("BOARD_RAW_ROWS_PER_DEPTH", host)
         self.assertNotIn("board_volume_mode", host)
 
-        self.assertIn("ITER=${2:-64}", run_sh)
+        self.assertIn("ITER=${2:-16384}", run_sh)
         self.assertIn("INPUT_TXT=${3:-./board_data/input.txt}", run_sh)
-        self.assertIn("aie_out_1lane_256x64_raw.txt", run_sh)
+        self.assertIn("aie_out_1plio_256x256x64.txt", run_sh)
 
     def test_toppl_directly_streams_and_stores_every_raw_volume_row(self):
         toppl = read("pl/TopPL.cpp")
 
-        self.assertIn("#define TRI1PLIO_MAX_ITER 64", toppl)
-        self.assertIn("#define TRI1PLIO_MAX_DDR_WORDS 1024", toppl)
-        self.assertIn("constexpr int kBoardGridRows = 64;", toppl)
-        self.assertIn("constexpr int kBoardGridDepth = 1;", toppl)
+        self.assertIn("#define TRI1PLIO_MAX_ITER 16384", toppl)
+        self.assertIn("#define TRI1PLIO_MAX_DDR_WORDS 262144", toppl)
+        self.assertIn("constexpr int kBoardGridRows = 256;", toppl)
+        self.assertIn("constexpr int kBoardGridDepth = 64;", toppl)
         self.assertIn(
             "constexpr int kBoardIter = kBoardGridRows * kBoardGridDepth;",
             toppl,
@@ -104,14 +104,16 @@ class BoardVolumeConfigTest(unittest.TestCase):
     def test_host_reports_bounded_pipeline_time(self):
         host = read("ps/host.cpp")
 
-        self.assertIn("constexpr int BOARD_GRID_ROWS = 64;", host)
-        self.assertIn("constexpr int BOARD_GRID_DEPTH = 1;", host)
+        self.assertIn("constexpr int BOARD_GRID_ROWS = 256;", host)
+        self.assertIn("constexpr int BOARD_GRID_DEPTH = 64;", host)
         self.assertIn("constexpr int BOARD_OUTPUT_ROWS = BOARD_GRID_ROWS * BOARD_GRID_DEPTH;", host)
         self.assertIn("topStencil.run(iter_cnt / hdiff_cfg::kRowsPerCall);", host)
+        self.assertIn("auto toppl_run = toppl(input_bo, output_bo, iter_cnt);", host)
         self.assertIn("topStencil.wait();", host)
         self.assertIn("topStencil.end();", host)
         self.assertIn("const long long pl_transfer_us = elapsed_us(pl_t0, pl_t1);", host)
         self.assertIn("const long long aie_run_us = elapsed_us(aie_t0, aie_t1);", host)
+        self.assertIn("const long long pipeline_total_us = elapsed_us(aie_t0, aie_t1);", host)
         self.assertRegex(
             host,
             r"const auto aie_t0 = Clock::now\(\);\s+"
@@ -128,7 +130,9 @@ class BoardVolumeConfigTest(unittest.TestCase):
         )
         self.assertIn('std::printf("pl_transfer_us : %lld\\n", pl_transfer_us);', host)
         self.assertIn('std::printf("aie_run_us     : %lld\\n", aie_run_us);', host)
+        self.assertIn('std::printf("pipeline_total_us : %lld\\n", pipeline_total_us);', host)
         self.assertNotIn("topStencil.run();", host)
+        self.assertNotIn("iter_cnt, 1", host)
         self.assertNotIn("repeat      :", host)
         self.assertNotIn("graph_pipeline_us", host)
         self.assertNotIn("toppl_t0", host)
@@ -138,9 +142,9 @@ class BoardVolumeConfigTest(unittest.TestCase):
         core_graph = read("aie/ProcessGraph/StencilCoreGraph.h")
         xrt_ini = read("xrt.ini")
 
-        self.assertIn("constexpr int kInputObjectFifoDepth = 2;", config)
-        self.assertIn("constexpr int kDelayedInputObjectFifoDepth = 2;", config)
-        self.assertIn("constexpr int kFluxInterObjectFifoDepth = 2;", config)
+        self.assertIn("constexpr int kInputObjectFifoDepth = 6;", config)
+        self.assertIn("constexpr int kDelayedInputObjectFifoDepth = 6;", config)
+        self.assertIn("constexpr int kFluxInterObjectFifoDepth = 6;", config)
         self.assertIn("constexpr int kOutputObjectFifoDepth = 2;", config)
         self.assertIn("fifo_depth(net_in_lap)     = hdiff_cfg::kInputObjectFifoDepth;", core_graph)
         self.assertIn("fifo_depth(net_in_flux1)   = hdiff_cfg::kDelayedInputObjectFifoDepth;", core_graph)
@@ -153,6 +157,19 @@ class BoardVolumeConfigTest(unittest.TestCase):
         self.assertNotIn("stall_trace=all", xrt_ini)
         self.assertNotIn("aie_profile=true", xrt_ini)
         self.assertNotIn("aie_status=true", xrt_ini)
+
+    def test_lap_uses_separate_sub_pack_outputs_to_avoid_output_fanout(self):
+        hdiff_h = read("aie/ProcessUnit/hdiff.h")
+        core_graph = read("aie/ProcessGraph/StencilCoreGraph.h")
+        lap = read("aie/ProcessUnit/hdiff_lap.cc")
+
+        self.assertIn("output_buffer<int32_t>& __restrict sub_pack_for_flux1", hdiff_h)
+        self.assertIn("output_buffer<int32_t>& __restrict sub_pack_for_flux2", hdiff_h)
+        self.assertIn("connect(k_lap.out[0], k_flux1.in[1])", core_graph)
+        self.assertIn("connect(k_lap.out[1], k_flux2.in[2])", core_graph)
+        self.assertNotIn("connect(k_lap.out[0], k_flux2.in[2])", core_graph)
+        self.assertIn("sub_pack_for_flux1.data()", lap)
+        self.assertIn("sub_pack_for_flux2.data()", lap)
 
     def test_aie_kernels_avoid_per_call_constant_arrays_and_unused_state(self):
         lap = read("aie/ProcessUnit/hdiff_lap.cc")
