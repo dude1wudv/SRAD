@@ -1,0 +1,70 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+**/.agents/
+REFACTOR_PROMPT.md
+context_pack_*.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Vitis/AIE/XRT generated state
+Work/
+Emulation-SW/
+Emulation-HW/
+package/
+sd_card/
+.Xil/
+_x/
+xsim.dir/
+aiesimulator_output/
+hw_emu/
+sw_emu/
+tmp_*check/
+*.xo
+*.xclbin
+*.xclbin.*
+*.xsa
+*.ltx
+*.jou
+*.wdb
+*.log
+*.str
+*.csv
+*.dat
+*.bin
+*.npy
+*.npz
+
+# Generated variant data
+**/data/*.txt
+**/data/*.tmp
+**/data/*.pgm
+**/board_data/*.txt
+**/board_data/*.tmp
+**/board_data/*.pgm
+
+# Local run outputs
+aie_out*.txt
+profile_summary*
+timeline_trace*
+summary.csv
+
+# Archives and packages
+*.zip
+*.tar
+*.tar.gz
+*.7z

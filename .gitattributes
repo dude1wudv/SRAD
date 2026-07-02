@@ -1,0 +1,17 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.sh text eol=lf
+Makefile text eol=lf
+*.mk text eol=lf
+
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pgm binary
+*.xclbin binary
+*.xo binary
+*.xsa binary

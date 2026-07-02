@@ -1,0 +1,41 @@
+#pragma once
+
+#include <adf.h>
+#include <cstdint>
+#include "Config.h"
+
+using namespace adf;
+
+using lap_input_buffer = input_buffer<
+    int32_t,
+    adf::extents<adf::inherited_extent>,
+    adf::margin<hdiff_cfg::kLapInputMarginElems>>;
+
+using flux1_input_buffer = input_buffer<
+    int32_t,
+    adf::extents<adf::inherited_extent>,
+    adf::margin<hdiff_cfg::kFlux1RawInputMarginElems>>;
+
+using flux2_input_buffer = input_buffer<
+    int32_t,
+    adf::extents<adf::inherited_extent>,
+    adf::margin<hdiff_cfg::kFlux2RawInputMarginElems>>;
+
+extern "C" {
+
+void hdiff_lap(
+    lap_input_buffer& __restrict in_window,
+    output_buffer<int32_t>& __restrict sub_pack);
+
+void hdiff_flux1(
+    flux1_input_buffer& __restrict in_window,
+    input_buffer<int32_t>& __restrict sub_pack,
+    output_buffer<int32_t>& __restrict mask_pack);
+
+void hdiff_flux2(
+    input_buffer<int32_t>& __restrict mask_pack,
+    flux2_input_buffer& __restrict in_window,
+    input_buffer<int32_t>& __restrict sub_pack,
+    output_buffer<int32_t>& __restrict out);
+
+} 
